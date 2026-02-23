@@ -1,4 +1,4 @@
-baseURL = 'https://jameslorencee.github.io/blogsbyjameslorencee/'
+baseURL = 'https://jameslorencee.github.io/blogsbyjameslorencee'
 languageCode = 'en-us'
 title = 'Blogs by JamesLorence'
 theme = 'archie'
@@ -23,7 +23,7 @@ weight = 1
 
 [[menu.main]]
 name = "All posts"
-url = "/posts"
+url = "/blogbyjameslorencee/posts"
 weight = 2
 
 [[menu.main]]
