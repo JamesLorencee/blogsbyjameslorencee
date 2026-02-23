@@ -1,3 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs by JamesLorence</title><link>https://example.org/</link><description>Recent content on Blogs by JamesLorence</description><generator>Hugo</generator><language>en-us</language><copyright>© JamesLorence</copyright><lastBuildDate>Mon, 23 Feb 2026 16:08:40 +0800</lastBuildDate><atom:link href="https://example.org/index.xml" rel="self" type="application/rss+xml"/><item><title>Test</title><link>https://example.org/posts/test/</link><pubDate>Mon, 23 Feb 2026 16:08:40 +0800</pubDate><guid>https://example.org/posts/test/</guid><description>&lt;p&gt;&lt;img src="https://cdn-images-1.medium.com/max/1200/0*ZBevrJS7ukirKPg3.jpg" alt=""&gt;&lt;/p&gt;
-&lt;p&gt;Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;DISCLAIMER:&lt;/strong&gt; I am &lt;strong&gt;not&lt;/strong&gt; an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs by JamesLorence</title>
+    <link>https://jameslorencee.github.io/blogsbyjameslorencee/</link>
+    <description>Recent content on Blogs by JamesLorence</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>© JamesLorence</copyright>
+    <lastBuildDate>Mon, 23 Feb 2026 16:08:40 +0800</lastBuildDate>
+    <atom:link href="https://jameslorencee.github.io/blogsbyjameslorencee/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Test</title>
+      <link>https://jameslorencee.github.io/blogsbyjameslorencee/posts/test/</link>
+      <pubDate>Mon, 23 Feb 2026 16:08:40 +0800</pubDate>
+      <guid>https://jameslorencee.github.io/blogsbyjameslorencee/posts/test/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://cdn-images-1.medium.com/max/1200/0*ZBevrJS7ukirKPg3.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;Hello everyone! I am James Lorence an Offensive Security Consultant and for this blog I will discuss with you some introductory Active Directory Penetration Testing for beginners.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;DISCLAIMER:&lt;/strong&gt; I am &lt;strong&gt;not&lt;/strong&gt; an expert in Active Directory penetration testing. This blog documents my learning journey and the techniques I’m practicing. The goal is to share what I’ve learned so far and grow alongside others who are also exploring Active Directory security testing.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

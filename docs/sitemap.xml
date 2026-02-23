@@ -1,1 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>https://example.org/</loc><lastmod>2026-02-23T16:08:40+08:00</lastmod></url><url><loc>https://example.org/posts/</loc><lastmod>2026-02-23T16:08:40+08:00</lastmod></url><url><loc>https://example.org/posts/test/</loc><lastmod>2026-02-23T16:08:40+08:00</lastmod></url><url><loc>https://example.org/categories/</loc></url><url><loc>https://example.org/tags/</loc></url></urlset>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://jameslorencee.github.io/blogsbyjameslorencee/</loc>
+    <lastmod>2026-02-23T16:08:40+08:00</lastmod>
+  </url><url>
+    <loc>https://jameslorencee.github.io/blogsbyjameslorencee/posts/</loc>
+    <lastmod>2026-02-23T16:08:40+08:00</lastmod>
+  </url><url>
+    <loc>https://jameslorencee.github.io/blogsbyjameslorencee/posts/test/</loc>
+    <lastmod>2026-02-23T16:08:40+08:00</lastmod>
+  </url><url>
+    <loc>https://jameslorencee.github.io/blogsbyjameslorencee/categories/</loc>
+  </url><url>
+    <loc>https://jameslorencee.github.io/blogsbyjameslorencee/tags/</loc>
+  </url>
+</urlset>
