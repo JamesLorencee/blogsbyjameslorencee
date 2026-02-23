@@ -1,4 +1,4 @@
-baseURL = 'https://jameslorencee.github.io/blogsbyjameslorencee'
+baseURL = 'https://jameslorencee.github.io/blogsbyjameslorencee/'
 languageCode = 'en-us'
 title = 'Blogs by JamesLorence'
 theme = 'archie'
@@ -6,15 +6,17 @@ copyright = "© JamesLorence"
 pygmentsstyle = "monokai"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
+relativeURLs = true
+canonifyURLs = false
+
 [params]
-	mode="auto"
-	useCDN=false
+mode="auto"
+useCDN=false
 
 [[params.social]]
 name = "GitHub"
 icon = "github"
 url = "https://github.com/JamesLorencee"
-
 
 [[menu.main]]
 name = "Home"
@@ -23,7 +25,7 @@ weight = 1
 
 [[menu.main]]
 name = "All posts"
-url = "/blogbyjameslorencee/posts"
+url = "/posts"
 weight = 2
 
 [[menu.main]]
