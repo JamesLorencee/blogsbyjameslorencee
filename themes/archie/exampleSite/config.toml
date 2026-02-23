@@ -1,4 +1,4 @@
-baseURL = "https://example.com"
+baseURL = "https://jameslorencee.github.io/blogsbyjameslorencee/"
 languageCode = "en-us"
 title = "Archie"
 theme="archie"
@@ -9,22 +9,21 @@ pygmentscodefencesguesssyntax = true
 [params]
 	mode="auto"
 	useCDN=false
-	subtitle = "Minimal and Clean [blog theme for Hugo](https://github.com/athul/archie)"
 
 [[params.social]]
 name = "GitHub"
 icon = "github"
-url = "https://github.com/athul/archie"
+url = ""
 
 [[params.social]]
 name = "Twitter"
 icon = "twitter"
-url = "https://twitter.com/athulcajay/"
+url = ""
 
 [[params.social]]
 name = "GitLab"
 icon = "gitlab"
-url = "https://gitlab.com/athul/"
+url = ""
 
 [[menu.main]]
 name = "Home"
